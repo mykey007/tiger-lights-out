@@ -30,11 +30,23 @@ import Cell from "./Cell"
 
 class Board extends Component {
 
+    static defaultProps = {
+        nrows: 5, 
+        ncols: 5,
+        chanceLightStartsOn: 50
+    }
+
     constructor(props) {
         super(props)
-
         // TODO: set initial state
-        this.setState ={ nrows: 5, ncols: 5}
+        this.state = {
+            hasWon: false, 
+            board: [
+                [1, 2],
+                [3, 4],
+                [5, 6]
+              ]
+        }
     }
 
     createBoard() {
@@ -48,6 +60,7 @@ class Board extends Component {
         let { ncols, nrows } = this.props
         let board = this.state.board
         let [x, y] = coord.split('-').map(Number)
+        let hasWon = this.state.hasWon
 
         function flipCell(y, x) {
             // if this coord is on board, flip it

@@ -5,7 +5,7 @@ class Cell extends Component {
     constructor(props) {
         super(props)
         this.handleClick = this.handleClick.bind(this)
-        this.setState={}
+        this.state={}
     }
 
     handleClick(evt) {
