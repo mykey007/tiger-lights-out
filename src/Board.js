@@ -60,10 +60,11 @@ class Board extends Component {
 
 
     flipCellsAround(coord) {
+        console.log("Flipping", coord)
         let { ncols, nrows } = this.props
         let board = this.state.board
         let [x, y] = coord.split('-').map(Number)
-        let hasWon = this.state.hasWon
+        // let hasWon = this.state.hasWon
 
         function flipCell(y, x) {
             // if this coord is on board, flip it
@@ -71,18 +72,37 @@ class Board extends Component {
                 board[y][x] = !board[y][x]
             }
         }
+
+        //flip clicked cell and those around it
+        flipCell(y, x) //flip initial cell
+        flipCell(y, x - 1) //flip left
+        flipCell(y, x + 1) // flip right
+        flipCell(y - 1, x) // flip bottom
+        flipCell(y + 1, x) // flip top
+
+        // every cell in every row should be false/dark
+        let hasWon = board.every(row => row.every(cell => !cell))
+        
         this.setState({board, hasWon})
     }
 
     render() {
-
+        if(this.state.hasWon) {
+            return <h1>You Win!!!!</h1>
+        }
         // Make tableBoard
         let tableBoard = []
         for(let y = 0; y < this.props.nrows; y++) {
             let row = []
             for(let x = 0; x < this.props.ncols; x++) {
                 let coord = `${y}-${x}`
-                row.push(<Cell key={coord} isLit={this.state.board[y][x]}/>)
+                row.push(
+                    <Cell 
+                        key={coord} 
+                        isLit={this.state.board[y][x]}
+                        flipCellsAroundMe={() => this.flipCellsAround(coord)}
+                    />
+                )
             }
             tableBoard.push(<tr key={y}>{row}</tr>)
         }
